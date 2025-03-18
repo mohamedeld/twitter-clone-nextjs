@@ -25,6 +25,27 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
         if (req.method === "POST") {
             if (!updatedFollowingIds.includes(userId)) {
                 updatedFollowingIds.push(userId); // Add userId if not already following
+                try{
+                  
+                    await prisma.notification.create({
+                      data:{
+                        body:'Someone followed you!',
+                        userId:userId
+                      }
+                    })
+                    await prisma.user.update({
+                      where:{
+                        id:userId
+                      },
+                      data:{
+                        hasNotification:true
+                      }
+                    })
+                }catch(error){
+                  return res.status(500).json({
+                    message: error instanceof Error ? error?.message : "Something went wrong",
+                  });
+                }
             }
         } else if (req.method === "DELETE") {
             updatedFollowingIds = updatedFollowingIds.filter(followingId => followingId !== userId); // Remove userId

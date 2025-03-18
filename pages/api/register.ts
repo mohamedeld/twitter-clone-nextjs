@@ -7,7 +7,13 @@ export default async function handler(req:NextApiRequest,res:NextApiResponse){
         return res.status(405).end();
     }
     try{
+      
         const {email,username,name,password} = req?.body;
+        if(!email || !username || !name || !password){
+          return res.status(405).json({
+            message:"please provide all data"
+        });
+        }
         const user = await prisma.user.findUnique({
             where:{email:email}
         })

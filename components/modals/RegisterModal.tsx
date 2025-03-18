@@ -14,6 +14,7 @@ const RegisterModal = () => {
     const [username,setUserName] = useState('');
     const [password,setPassword] = useState('')
     const [isLoading,setLoading] = useState(false);
+    console.log("ema" ,email)
     const onSubmit = useCallback(async ()=>{
         try{
             setLoading(true);
